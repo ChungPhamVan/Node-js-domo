@@ -1,0 +1,16 @@
+div(width="50%" height="30px" style={color: 'white', background: '#333'}) Pham Van Chung
+br
+br
+h1
+	a(href="/users/create") Create Users
+br
+form(action="/users/search", method='GET')
+	input(type="text", name='q', id="input-text", value=q)
+	button Search
+ul
+	each user in users
+		li
+			span= user.name
+			span &nbsp
+			a(href="/users/" + user.id) View
+
