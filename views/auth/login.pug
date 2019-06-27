@@ -1,0 +1,25 @@
+extends ../layout/common.pug
+
+block linkCommon
+	h1.text-center.mt-5.mb-2 Login Email
+	.container.mt-5
+		.row.d-flex.flex-column.align-items-center
+			.d-flex.justify-content-center.w-100
+				form(active="/auth/login", method="POST", class="form-group w-50")
+					if errors
+						each error in errors
+							.alert.alert-danger= error
+
+					label(for="Email")
+						h3 Email
+					input(type="email", name="email", id="Email", class="form-control w-100 mr-5", placeholder="Enter your email ...", value=values ? values.email : "")
+
+					label.mt-3(for="Password")
+						h3 Password
+					input(type="password", name="password", id="Password", class="form-control w-100 mr-5", placeholder="Enter your password ...")
+
+					.d-flex.justify-content-center.mt-5
+						button(class="btn btn-primary w-50")
+							h4.mt-1.mb-1 Login
+			div
+				a.btn.btn-outline-primary(href="/auth/signup") Sign up

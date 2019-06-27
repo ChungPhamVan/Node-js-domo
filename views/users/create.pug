@@ -1,8 +1,54 @@
-h1 Create
-form(active="/users/create" method="POST")
-	label Name
-	br
-	input(type="text" name="name" width="200px" height="30px")
-	br
-	br
-	button Create 
+extends ../layout/common.pug
+
+block linkCommon
+	nav.position-fixed.fixed-top.w-100.overflow-auto(class="navbar navbar-expand-lg navbar-light")
+		a(class="navbar-brand", href="/users")
+			img(src="/image/bootstrap.png" alt="image ...", width="40px", height="40px", class="rounded mr-2")
+		button(class="navbar-toggler", type="button", data-toggle="collapse", data-target="#navbarNavDropdown", aria-controls="navbarNavDropdown", aria-expanded="false", aria-label="Toggle navigation")
+			span(class="navbar-toggler-icon")
+		div(class="collapse navbar-collapse", id="navbarNavDropdown")
+			ul(class="navbar-nav")
+				li(class="nav-item")
+					a(class="nav-link", href="/users") Home 
+				li(class="nav-item")
+					a(class="nav-link", href="/users/create") Create 
+
+
+	.container(style={height: "100px"})
+
+
+	h1.text-center.mt-5.mb-2 Create
+	.container.mt-5
+		.row.d-flex.justify-content-center
+			form(active="/users/create", method="POST", class="form-group w-50", enctype="multipart/form-data")
+				if errors
+					each error in errors
+						.alert.alert-danger= error
+				form-group
+					label(for="Name")
+						h3 Name
+					input(type="text", name="name", id="Name", class="form-control w-100 mr-5", placeholder="Enter your name ...", value=values ? values.name : "")
+
+				form-group
+					label.mt-3(for="Phone")
+						h3 Phone
+					input(type="text", name="phone", id="Phone", class="form-control w-100 mr-5", placeholder="Enter your phone ...", value=values ? values.phone : "")
+				
+				form-group
+					label.mt-3(for="Email")
+						h3 Email
+					input(type="text", name="email", id="Email", class="form-control w-100 mr-5", placeholder="Enter your email ...", value=values ? values.email : "")
+
+				form-group
+					label.mt-3(for="Password")
+						h3 Password
+					input(type="text", name="password", id="Password", class="form-control w-100 mr-5", placeholder="Enter your password ...", value=values ? values.password : "")
+
+				form-group
+					label.mt-3(for="avatar")
+						h3 Avatar-image
+					input#avatar-image.form-control-file(type="file", name="avatar")
+					
+				.d-flex.justify-content-center.mt-5
+					button(class="btn btn-primary w-50")
+						h4.mt-1.mb-1 Create 	

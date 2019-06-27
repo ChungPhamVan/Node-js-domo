@@ -1,0 +1,64 @@
+extends ../layout/common.pug
+
+
+block linkCommon
+	h1.text-center.mb-5= "Products "
+	.container
+		.row.d-flex.flex-row.justify-content-end.col-12.mb-5
+			button.btn.btn-primary.btn-lg.mr-3(type="button",data-toggle="modal", data-target="#cart") Giỏ hàng
+			.modal.fade(id="cart", tabindex="-1", role="dialog", aria-labelledby="cartLabel", aria-hidden="true")
+				.modal-dialog.modal-dialog-centered(role="document")
+					.modal-content
+						.modal-header
+							h4.modal-title#cartLabel Giỏ hàng
+							button.close(type="button", data-dismiss="modal", aria-label="Close")
+								span(aria-hidden="true") &times;
+						.modal-body
+							table.table.w-100
+								thead
+									tr
+										th(scope="col") STT
+										th(scope="col") Name
+										th(scope="col") Description
+										th(scope="col") Amount
+								tbody
+									tr
+
+						.modal-footer
+							button.btn-info.btn-lg(data-dismiss="modal") Close
+
+
+		.row.d-flex.flex-row.justify-content-end.col-12.mb-4
+
+			form.d-flex.w-50.justify-content-end.pr-3(action="/products/search", method='GET')
+				input.form-control.flex-grow-1(type="text", name='q', id="input-text", value=q)
+				button(class="btn btn-primary ml-4", style={width: "9rem"}) Search
+		.row.col-12
+			each product in products
+				.px-3.mb-5.col-3.col-xs-12.col-sm-12.col-md-6.col-lg-4.col-xl-3
+					.card
+						img.card-img-top(src=product.image, alt="image")
+						.card-body
+							h5.card-title= product.name
+							p.card-text= product.description
+							a.btn.btn-primary(href="/products/cart/add/" + product.id) Add to cart
+		.row.d-flex.justify-content-end
+			nav(aria-label="Page navigation example", style='padding-left: 0px; padding-bottom: 0px; background-color: white;', class="mr-3")
+				ul.panigation.d-flex.mb-0(style='list-style-type: none;')
+					li.page-item
+						a.page-link(href="/products?page="+pagePrev, aria-label="Previous")
+							span(aria-hidden="true") &laquo;
+					each page, index in pages
+						case index
+							when 0
+								li.page-item(class= onPage==page ? "active" : "")
+									a.page-link(href="/products?page="+page)= page
+							when 1
+								li.page-item(class= onPage==page ? "active" : "")
+									a.page-link(href="/products?page="+page)= page
+							when 2
+								li.page-item(class= onPage==page ? "active" : "")
+									a.page-link(href="/products?page="+page)= page
+					li.page-item
+						a.page-link(href="/products?page="+pageNext, aria-label="Next")
+							span(aria-hidden="true") &raquo

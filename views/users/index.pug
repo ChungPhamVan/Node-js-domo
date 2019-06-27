@@ -1,16 +1,58 @@
-div(width="50%" height="30px" style={color: 'white', background: '#333'}) Pham Van Chung
-br
-br
-h1
-	a(href="/users/create") Create Users
-br
-form(action="/users/search", method='GET')
-	input(type="text", name='q', id="input-text", value=q)
-	button Search
-ul
-	each user in users
-		li
-			span= user.name
-			span &nbsp
-			a(href="/users/" + user.id) View
+extends ../layout/common.pug
 
+block linkCommon
+	nav.position-fixed.fixed-top.w-100.overflow-auto(class="navbar navbar-expand-lg navbar-light")
+		a.navbar-brand(href="/users")
+			img.rounded.mr-2(src="/image/bootstrap.png" alt="image ...", width="40px", height="40px")
+		button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarNavDropdown", aria-controls="navbarNavDropdown", aria-expanded="false", aria-label="Toggle navigation")
+			span.navbar-toggler-icon
+		div.collapse.navbar-collapse(id="navbarNavDropdown")
+			ul.navbar-nav
+				li.nav-item
+					a.nav-link(href="/users") Home 
+				li.nav-item
+					a.nav-link(href="/users/create") Create
+				li.nav-item
+					a.nav-link(href="/transfer/create") Transfer
+				li.nav-item
+					a.nav-link(href="/products") Products
+		h4(style={color: "white"})= user.name
+
+
+	.container(style={height: "100px"})
+	h1.text-center Create Users
+	.container.mb-2
+		.row
+			.col-12
+				.d-flex.justify-content-between.align-items-center
+					a.btn.btn-primary.offset-3(href="/users/create") New
+					form.d-flex.col-6.align-items-center(action="/users/search", method='GET')
+						input.form-control.col-6(type="text", name='q', id="input-text", value=q)
+						button(class="btn btn-primary ml-4") Search
+
+
+	.container
+		.row
+			.col-12
+				table.table.table-hover
+					thead.thead-dark
+						tr
+							th(scope="col") STT
+							th(scope="col") Avatar
+							th(scope="col") Name
+							th(scope="col") Phone
+							th(scope="col") Email
+							th(scope="col") Password
+							th(scope="col") Action
+					tbody
+						each user, index in users
+							tr
+								td= index + 1
+								td
+									img(src=user.avatar, width="32px")
+								td= user.name
+								td= user.phone
+								td= user.email
+								td= user.password
+								td
+									a(href="/users/" + user.id) View

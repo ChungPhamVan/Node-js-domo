@@ -1,38 +1,23 @@
-var express = require('express')
+var express = require('express');
+var validate = require('../validate/user.validate.js');
+var multer  = require('multer');
 var router= express.Router();
+var upload = multer({ dest: './public/uploads/' });
 
+var controller = require('../controllers/user.controller.js');
 
-router.get('', function(req, res) {
-	res.render('users/index.pug', {
-		users: db.get('users').value()
-	});
-});
+router.get('/', controller.index);
 
-router.get('/search', function(req, res) {
-	var qr = req.query.q;
-	var arrSearch = db.get('users').value().filter(function(index) {
-		return index.name.toLowerCase().includes(qr.toLowerCase());
-	});
-	res.render('users/index.pug', {
-		users: arrSearch,
-		q: qr
-	});
-});
+router.get('/search', controller.search);
 
-router.get('/create', function(req, res) {
-	res.render('users/create.pug');
-});
+router.get('/create', controller.createGet);
 
-router.post('/create', function(req, res) {
-	req.body.id = shortid.generate();
-	db.get('users').push(req.body).write();
-	res.redirect('/users');
-});
+router.post('/create',
+	 upload.single('avatar'),
+	 validate.post,
+	 controller.createPost
+);
 
-router.get('/:id', function(req, res) {
-	var idm = req.params.id;
-	var user = db.get('users').find({ id: idm}).value();
-	res.render('users/viewuser.pug',{ user: user});
-});
+router.get('/:id', controller.view);
 
 module.exports = router;

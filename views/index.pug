@@ -1,3 +1,12 @@
-h1 Hello wolrd #{name}
-br
-a(href="/users") =Users
+extends ./layout/common
+
+
+block linkCommon
+	.container.d-flex.justify-content-center.align-items-center.h-100
+		.row.w-50.h-50.bg-light.d-flex.flex-column
+			h1.text-center.mt-4 Hello #{name}
+			.d-flex.flex-column.justify-content-around.align-items-center.h-50
+				a.w-50.btn.btn-primary(href="/users")
+					h5 Users
+				a.w-50.btn.btn-primary(href="/auth/login")
+					h5 Login

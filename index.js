@@ -1,62 +1,59 @@
+require('dotenv').config();
 var express = require('express');
+var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URL);
+
+
+
+var userRoute = require('./routes/user.route.js');
+var loginRoute = require('./routes/auth.login.js');
+var signupRoute = require('./routes/auth.signup.js');
+var showProductRoute = require('./routes/product.route.js');
+var transferCreateRoute = require('./routes/transfer.create.route.js');
+var apiProductRoute = require('./api/routes/product.route.js');
+
+
+
+
+var authMiddlewares = require('./middlewares/auth.middleware.js');
+var sessionMiddleware = require('./middlewares/session.middleware.js');
+
 var app = express();
-var shortid = require('shortid');
 app.set('view engine', 'pug');
 app.set('views', './views');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-var low = require('lowdb');
-var FileSync = require('lowdb/adapters/FileSync');
-var adapter = new FileSync('db.json');
-var db = low(adapter);
-db.defaults({ users: [] })
-  .write();
-
-
-
-
+app.use(cookieParser(process.env.SESSION_SECRET));
+app.use(sessionMiddleware);
 
 
 var port = 3000;
+
+app.use('/users', authMiddlewares.authMiddleware, userRoute);
+app.use('/auth', loginRoute);
+app.use('/auth', signupRoute);
+app.use('/products', showProductRoute);
+app.use('/transfer', authMiddlewares.authMiddleware, transferCreateRoute);
+app.use('/api/products', apiProductRoute);
+
+
+
+
+
+app.use(express.static('public'));
+
+
 app.get('/', function(req, res) {
     res.render('index.pug', {
     	name: 'Chung'
     });
 });
 
-app.get('/users', function(req, res) {
-	res.render('users/index.pug', {
-		users: db.get('users').value()
-	});
-});
-
-app.get('/users/search', function(req, res) {
-	var qr = req.query.q;
-	var arrSearch = db.get('users').value().filter(function(index) {
-		return index.name.toLowerCase().includes(qr.toLowerCase());
-	});
-	res.render('users/index.pug', {
-		users: arrSearch,
-		q: qr
-	});
-});
-
-app.get('/users/create', function(req, res) {
-	res.render('users/create.pug');
-});
-
-app.post('/users/create', function(req, res) {
-	req.body.id = shortid.generate();
-	db.get('users').push(req.body).write();
-	res.redirect('/users');
-});
-
-app.get('/users/:id', function(req, res) {
-	var idm = req.params.id;
-	var user = db.get('users').find({ id: idm}).value();
-	res.render('users/viewuser.pug',{ user: user});
-});
 app.listen(port, function() {
     console.log('Server listening on port: ' + port);
 });

@@ -1,0 +1,25 @@
+extends ../layout/common.pug
+
+block linkCommon
+	h1.text-center.mt-5.mb-2 Account(Chuyển tiền qua tài khoản)
+	.container.mt-5
+		.row.d-flex.justify-content-center
+			form.form-group.w-50(method="POST", active="/transfer/create")
+				if errors
+					each error in errors
+						.alert.alert-danger= error
+
+				form-group
+					label(for="Account")
+						h3 Account
+					input.form-control.mr-5.w-100(type="text", name="account", id="Account", placeholder="Enter your account ...", value=values ? values.account : "")
+
+				form-group
+					label(for="Amount")
+						h3 Amount
+					input(type="text", name="amount", id="Amount", class="form-control w-100 mr-5", placeholder="Enter your amount ...", value=values ? values.amount : "")
+
+				.d-flex.justify-content-center.mt-5
+					button(class="btn btn-primary w-50")
+						h4.mt-1.mb-1 Submit
+				input(type="hidden", name="_csrf", value=csrfToken)
